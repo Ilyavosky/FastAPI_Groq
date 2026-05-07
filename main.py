@@ -19,29 +19,13 @@ async def home():
         "message":"Bienvenido a la API de prueba de FastAPI"
     }
 
-@app.post("/prompt")
-async def send_prompt(fetch:FetchAI):
-    """
-        Recibe un prompt y espera la respuesta del agente LLM
-    """
+@app.post("/prompt") #Endpoint diseñado para realizar una petición a la API de Groq.
+async def send_prompt(fetch: FetchAI):
     try:
-        response = await groq_client.chat.completions.create(
-            model= os.environ.get("GROQ_MODEL"),
-           messages=[
-    {
-        "role": "system",
-        "content": f"Eres un experto técnico. Responde en máximo {fetch.answer} palabras"
-    },
-    {
-        "role": "user",
-        "content": fetch.prompt
-    }
-],
-            temperature=0.3
-        )
+        answer = await ask(fetch.prompt, fetch.answer)
         return {
-            "answer": response.choices[0].message.content,
+            "answer": answer,
             "info": "Procesando con Groq LPU"
-        }
+            }
     except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Error al procesar la respuesta:{str(e)}")
+        raise HTTPException(status_code=500, detail=str(e))

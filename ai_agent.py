@@ -9,3 +9,23 @@ if not api_key:
     raise ValueError("GROQ_API_KEY no está configurada en el entorno")
 
 groq_client = AsyncGroq(api_key=api_key)
+
+async def ask(prompt : str, max_words: int ) -> str:
+    response = await groq_client.chat.completions.create(
+        model= os.environ.get("GROQ_MODEL"),
+        messages= [
+            {
+                "role": "system",
+                "content": f"Eres un experto técnico. Responde en máximo {fetch.answer} palabras"
+            },
+            {
+                "role": "user",
+                "content": prompt
+            }
+        ],
+        temperature= 0.3
+    )
+    return {
+        "answer": response.choices[0].message.content,
+        "info": "Procesando con Groq LPU"
+    }
