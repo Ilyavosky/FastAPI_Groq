@@ -23,7 +23,7 @@ async def ask(prompt : str, max_words: int ) -> str:
                 "content": prompt
             }
         ],
-        temperature= 0.3
+        temperature= 1
     )
     return response.choices[0].message.content 
     
