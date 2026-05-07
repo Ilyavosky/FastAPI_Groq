@@ -1,10 +1,8 @@
 from fastapi import FastAPI, HTTPException
 from model import FetchAI
-from dotenv import load_dotenv
 from ai_agent import groq_client
-from groq import AsyncGroq
+import os
 
-load_dotenv()
 
 app = FastAPI(
     title = "API de prueba con interacion a Groq",
@@ -28,7 +26,7 @@ async def send_prompt(fetch:FetchAI):
     """
     try:
         response = await groq_client.chat.completions.create(
-            model="llama-3.3-70b-versatile",
+            model= os.environ.get("GROQ_MODEL"),
            messages=[
     {
         "role": "system",
