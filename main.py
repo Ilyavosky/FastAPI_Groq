@@ -1,7 +1,7 @@
 from fastapi import FastAPI, HTTPException
 from model import FetchAI
+from ai_agent import ask
 from ai_agent import groq_client
-import os
 
 
 app = FastAPI(
@@ -22,7 +22,7 @@ async def home():
 @app.post("/prompt") #Endpoint diseñado para realizar una petición a la API de Groq.
 async def send_prompt(fetch: FetchAI):
     try:
-        answer = await ask(fetch.prompt, fetch.answer)
+        answer = await ask(fetch.prompt, fetch.max_words)
         return {
             "answer": answer,
             "info": "Procesando con Groq LPU"

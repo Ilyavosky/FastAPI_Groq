@@ -16,7 +16,7 @@ async def ask(prompt : str, max_words: int ) -> str:
         messages= [
             {
                 "role": "system",
-                "content": f"Eres un experto técnico. Responde en máximo {fetch.answer} palabras"
+                "content": f"Eres un experto técnico. Responde en máximo {max_words} palabras"
             },
             {
                 "role": "user",
