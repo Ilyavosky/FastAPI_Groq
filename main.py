@@ -29,16 +29,16 @@ async def send_prompt(fetch:FetchAI):
     try:
         response = await groq_client.chat.completions.create(
             model="llama-3.3-70b-versatile",
-            messages=[
-                {
-                    "role": "system",
-                    "content": f"Eres un experto técnico. Responde en máximo {fetch.answer} palabras"
-                },
-                {
-                    "role" : "user",
-                    "content" : fetch.answer 
-                }
-            ],
+           messages=[
+    {
+        "role": "system",
+        "content": f"Eres un experto técnico. Responde en máximo {fetch.answer} palabras"
+    },
+    {
+        "role": "user",
+        "content": fetch.prompt
+    }
+],
             temperature=0.3
         )
         return {
