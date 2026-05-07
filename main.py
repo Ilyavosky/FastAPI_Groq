@@ -26,8 +26,24 @@ async def send_prompt(fetch:FetchAI):
     """
         Recibe un prompt y espera la respuesta del agente LLM
     """
-try:
-    answer = await groq_client
-except:
-    pass
-
+    try:
+        response = await groq_client.chat.completions.create(
+            model="llama-3.3-70b-versatile",
+            messages=[
+                {
+                    "role": "system",
+                    "content": f"Eres un experto técnico. Responde en máximo {fetch.answer} palabras"
+                },
+                {
+                    "role" : "user",
+                    "content" : fetch.answer 
+                }
+            ],
+            temperature=0.3
+        )
+        return {
+            "answer": response.choices[0].message.content,
+            "info": "Procesando con Groq LPU"
+        }
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error al procesar la respuesta:{str(e)}")
