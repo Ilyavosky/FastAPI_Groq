@@ -25,7 +25,5 @@ async def ask(prompt : str, max_words: int ) -> str:
         ],
         temperature= 0.3
     )
-    return {
-        "answer": response.choices[0].message.content,
-        "info": "Procesando con Groq LPU"
-    }
+    return response.choices[0].message.content 
+    
