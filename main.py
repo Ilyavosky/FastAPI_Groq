@@ -1,11 +1,19 @@
 from fastapi import FastAPI, HTTPException
+from fastapi.middleware.cors import CORSMiddleware
 from model import FetchAI
 from ai_agent import ask
 
 app = FastAPI(
     title="API de prueba con interacción a Groq",
     description="Devuelve respuestas estructuradas con Pydantic",
-    version="1.0.0"
+    version="1.0.5"
+)
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["http://localhost:3000"],
+    allow_methods=["POST", "GET", "OPTIONS"],
+    allow_headers=["*"],
 )
 
 @app.get("/")
