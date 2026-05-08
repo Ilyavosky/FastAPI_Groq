@@ -2,6 +2,7 @@ from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from model import FetchAI
 from ai_agent import ask
+from chat_service import create_session, save_message, record
 
 app = FastAPI(
     title="API de prueba con interacción a Groq",
@@ -23,12 +24,19 @@ async def home():
 
 @app.post("/prompt")
 async def send_prompt(fetch: FetchAI):
-    #Recibe un prompt y espera la respuesta del agente LLM
+    #Recibe un prompt y espera la respuesta del agente LLM 
     try:
+        make_session = create_session()
+        save_message(session_id=make_session, role="user", content=fetch.prompt)
         answer = await ask(fetch.prompt, fetch.max_words)
+        save_message(session_id=make_session, role="assistant", content=answer) 
         return {
             "answer": answer,
             "info": "Procesando con Groq LPU"
         }
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+    
+@app.get("/history/{session_id}")
+async def historial(session_id: str):
+    return record(session_id=session_id)
