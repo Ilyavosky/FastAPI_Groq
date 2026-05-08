@@ -27,3 +27,12 @@ def record(session_id: UUID) -> dict:
         .execute()
     )
     return response.data
+
+def get_sessions() -> list:
+    response = (
+        supabase.table("sessions")
+        .select("*")
+        .order("updated_at", desc=True)
+        .execute()
+    )
+    return response.data

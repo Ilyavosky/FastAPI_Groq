@@ -2,7 +2,7 @@ from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from model import FetchAI
 from ai_agent import ask
-from chat_service import create_session, save_message, record
+from chat_service import create_session, save_message, record, get_sessions
 
 app = FastAPI(
     title="API de prueba con interacción a Groq",
@@ -40,3 +40,7 @@ async def send_prompt(fetch: FetchAI):
 @app.get("/history/{session_id}")
 async def historial(session_id: str):
     return record(session_id=session_id)
+
+@app.get("/sessions")
+async def list_sessions():
+    return get_sessions()
